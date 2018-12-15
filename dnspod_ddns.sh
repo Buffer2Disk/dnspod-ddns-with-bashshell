@@ -2,6 +2,11 @@
 #Github:https://github.com/lixuy/dnspod-ddns-with-bashshell
 #More: https://03k.org/dnspod-ddns-with-bashshell.html
 #CONF START
+#
+#
+#see : https://github.com/Buffer2Disk/dnspod-ddns-with-bashshell
+#crontab : */1 * * * * /root/dnspod_ddns.sh &> /var/log/hkt-dnspod-ddns.log
+#          */1 * * * * /root/dnspod_ddns.sh &> /dev/null
 API_ID=12345
 API_Token=abcdefghijklmnopq2333333
 domain=example.com
@@ -30,7 +35,7 @@ fi
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
 UA="User-Agent: 03K MyMachine/1.0.0 ($Email)"
-Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
+Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}" -H "${UA}")"
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
@@ -42,7 +47,7 @@ fi
 record_id=$(echo ${Record#*\"records\"\:\[\{\"id\"}|cut -d'"' -f2)
 record_line_id=$(echo ${Record#*line_id}|cut -d'"' -f3)
 echo Start DDNS update...
-ddns="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}")"
+ddns="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}" -H "${UA}")"
 ddns_result="$(echo ${ddns#*message\"}|cut -d'"' -f2)"
 echo -n "DDNS upadte result:$ddns_result "
 echo $ddns|grep -Eo "$IPREX"|tail -n1
