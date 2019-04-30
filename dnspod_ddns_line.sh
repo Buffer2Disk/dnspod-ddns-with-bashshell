@@ -1,5 +1,5 @@
 #Dnspod DDNS with BashShell
-#Github:https://github.com/lixuy/dnspod-ddns-with-bashshell
+#Github:https://github.com/kkkgo/dnspod-ddns-with-bashshell
 #More: https://03k.org/dnspod-ddns-with-bashshell.html
 #CONF START
 API_ID=12345
@@ -30,7 +30,7 @@ echo "IP SAME IN DNS,SKIP UPDATE."
 exit
 fi
 token="login_token=${API_ID},${API_Token}&format=json&lang=en&error_on_empty=yes&domain=${domain}&sub_domain=${host}"
-Record="$(curl $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
+Record="$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.List -d "${token}")"
 iferr="$(echo ${Record#*code}|cut -d'"' -f3)"
 if [ "$iferr" == "1" ];then
 record_ip=$(echo ${Record#*value}|cut -d'"' -f3)
@@ -42,7 +42,7 @@ fi
 record_id=$(echo ${Record#*\"records\"\:\[\{\"id\"}|cut -d'"' -f2)
 record_line_id=$(echo ${Record#*line_id}|cut -d'"' -f3)
 echo Start DDNS update...
-ddns="$(curl -4 $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}&value=$DEVIP")"
+ddns="$(curl -4 -k $(if [ -n "$OUT" ]; then echo "--interface $OUT"; fi) -s -X POST https://dnsapi.cn/Record.Ddns -d "${token}&record_id=${record_id}&record_line_id=${record_line_id}&value=$DEVIP")"
 ddns_result="$(echo ${ddns#*message\"}|cut -d'"' -f2)"
 echo -n "DDNS upadte result:$ddns_result "
 echo $ddns|grep -Eo "$IPREX"|tail -n1
