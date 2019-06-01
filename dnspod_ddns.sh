@@ -11,7 +11,7 @@ API_ID=12345
 API_Token=abcdefghijklmnopq2333333
 domain=example.com
 host=home
-CHECKURL="http://ip.03k.org"
+CHECKURL="http://ip.sb"
 #OUT="pppoe"
 #CONF END
 
