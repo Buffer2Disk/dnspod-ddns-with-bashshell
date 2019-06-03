@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#请记得执行 chmod+x xxx.sh
 domain=example.com
 host=www #填你的二级域名
 CHECKURL="http://ip.sb"
@@ -46,4 +47,4 @@ exit
 fi
 fi
 
-Send_TG_Message "ip变动通知，域名***${host}*** 所属ip发生变动，请等待ddns更新,旧的ip:    ***${record_ip}***     更换为新ip:    ***${URLIP}***"
+Send_TG_Message "ip变动通知，域名***${host}*** 所属ip发生变动，请等待ddns更新,旧的ip:    ***${DNSIP}***     更换为新ip:    ***${URLIP}***"
