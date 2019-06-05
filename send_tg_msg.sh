@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #请记得执行 chmod+x xxx.sh
+#如果刷ip的脚本更换ip后，tg机器人很长时间没有提醒发消息，那么新的ip可能和dns里面的是相同的
 domain=example.com
 host=www #填你的二级域名
 CHECKURL="http://ip.sb"
@@ -46,5 +47,8 @@ echo "IP SAME IN DNS,SKIP UPDATE."
 exit
 fi
 fi
+
+#一般更换ip后，dns会被dhclient改成默认的，这里覆盖改成Google的dns
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 Send_TG_Message "ip变动通知，域名***${host}*** 所属ip发生变动，请等待ddns更新,旧的ip:    ***${DNSIP}***     更换为新ip:    ***${URLIP}***"

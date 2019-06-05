@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #Dnspod DDNS with BashShell
 #Github:https://github.com/kkkgo/dnspod-ddns-with-bashshell
 #More: https://03k.org/dnspod-ddns-with-bashshell.html
